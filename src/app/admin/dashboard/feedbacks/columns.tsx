@@ -3,10 +3,10 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Category } from "@prisma/client";
+import { Feedback } from "@prisma/client";
 import { Checkbox } from "@/components/ui/checkbox";
 
-export const columns: ColumnDef<Category>[] = [
+export const columns: ColumnDef<Feedback>[] = [
   {
     id: "select",
     header: ({ table }) => (

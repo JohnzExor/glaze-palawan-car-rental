@@ -1,14 +1,14 @@
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
-import { Vehicle } from "@prisma/client";
-import { findAllVehiclesUseCase } from "@/use-cases/vehicle";
+import { Payment } from "@prisma/client";
+import { findAllPaymentsUseCase } from "@/use-cases/payment";
 
 const page = async () => {
-  let data: Vehicle[] = [];
+  let data: Payment[] = [];
   let error;
 
   try {
-    data = await findAllVehiclesUseCase();
+    data = await findAllPaymentsUseCase();
   } catch (err) {
     console.error(err);
     error = "Error fetching data";

@@ -1,6 +1,6 @@
 import { findAllVehicles } from "@/data-access/vehicle";
 
-export const findAllVehicleUseCase = async () => {
+export const findAllVehiclesUseCase = async () => {
   const data = await findAllVehicles();
   return data;
 };
