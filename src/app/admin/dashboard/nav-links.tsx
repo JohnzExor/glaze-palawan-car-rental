@@ -60,7 +60,7 @@ const navigations = [
     links: [
       {
         name: "Feedback",
-        path: "/admin/dashboard/feedback",
+        path: "/admin/dashboard/feedbacks",
         icon: Star,
       },
     ],

@@ -42,4 +42,99 @@ export const columns: ColumnDef<Vehicle>[] = [
       </Button>
     ),
   },
+  {
+    accessorKey: "name",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        className="shadow-none"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Name
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+  },
+  {
+    accessorKey: "type",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        className="shadow-none"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Type
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+  },
+  {
+    accessorKey: "category.name",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        className="shadow-none"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Category
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+  },
+  {
+    accessorKey: "licensePlate",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        className="shadow-none"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        License Plate
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+  },
+  {
+    accessorKey: "rentPerDay",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        className="shadow-none"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Rent per Day
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+  },
+  {
+    accessorKey: "isAvailable",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        className="shadow-none"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Available
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+    cell: ({ row }) => (row.getValue("isAvailable") ? "Yes" : "No"),
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => (
+      <div className="flex items-center space-x-2">
+        <Button variant="outline" size="sm">
+          Edit
+        </Button>
+        <Button variant="destructive" size="sm">
+          Delete
+        </Button>
+      </div>
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
 ];

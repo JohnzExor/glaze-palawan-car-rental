@@ -42,4 +42,47 @@ export const columns: ColumnDef<Category>[] = [
       </Button>
     ),
   },
+  {
+    accessorKey: "name",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        className="shadow-none"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Category Name
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+  },
+  {
+    accessorKey: "description",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        className="shadow-none"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Description
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+    cell: ({ row }) => row.getValue("description") ?? "No description",
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => (
+      <div className="flex items-center space-x-2">
+        <Button variant="outline" size="sm">
+          Edit
+        </Button>
+        <Button variant="destructive" size="sm">
+          Delete
+        </Button>
+      </div>
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
 ];
