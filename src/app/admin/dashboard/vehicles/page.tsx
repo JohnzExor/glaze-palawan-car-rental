@@ -2,6 +2,7 @@ import { columns } from "./columns";
 import { DataTable } from "./data-table";
 import { Vehicle } from "@prisma/client";
 import { findAllVehiclesUseCase } from "@/use-cases/vehicle";
+import AddVehicleDialog from "./add-vehicle-dialog";
 
 const page = async () => {
   let data: Vehicle[] = [];
@@ -14,7 +15,10 @@ const page = async () => {
     error = "Error fetching data";
   }
   return (
-    <div>{!error ? <DataTable data={data} columns={columns} /> : error}</div>
+    <>
+      <AddVehicleDialog />
+      {!error ? <DataTable data={data} columns={columns} /> : error}
+    </>
   );
 };
 

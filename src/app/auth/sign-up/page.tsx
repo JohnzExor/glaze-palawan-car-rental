@@ -1,11 +1,9 @@
-import { Header } from "@/app/explore/header";
 import { SignupForm } from "./signup-form";
 import Link from "next/link";
 
 export default function SignupPage() {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       <main className="flex-grow flex items-center justify-center bg-gray-50">
         <div className="max-w-md w-full space-y-8 p-8 bg-white shadow-lg rounded-lg">
           <div className="text-center">

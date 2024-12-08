@@ -94,6 +94,7 @@ enum VehicleType {
   SUV
   VAN
   TRUCK
+  MOTORCYCLE
 }
 
 enum BookingStatus {

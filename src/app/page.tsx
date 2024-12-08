@@ -6,6 +6,12 @@ import { VehicleType } from "@prisma/client";
 import { PhoneIcon as WhatsappIcon, PhoneIcon, MapPinIcon } from "lucide-react";
 import { VehicleTypeIcon } from "./vehicle-type-icon";
 
+const links = [
+  { name: "Vehicles", path: "/explore" },
+  { name: "About", path: "#about" },
+  { name: "Contact", path: "#contact" },
+];
+
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
@@ -24,26 +30,16 @@ export default function Home() {
           </div>
           <nav>
             <ul className="flex space-x-4">
-              <li>
-                <Link href="#" className="text-gray-600 hover:text-gray-900">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-gray-600 hover:text-gray-900">
-                  Vehicles
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-gray-600 hover:text-gray-900">
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-gray-600 hover:text-gray-900">
-                  Contact
-                </Link>
-              </li>
+              {links.map(({ path, name }, index) => (
+                <li key={index}>
+                  <Link
+                    href={path}
+                    className="text-gray-600 hover:text-gray-900"
+                  >
+                    {name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </nav>
         </div>
@@ -93,7 +89,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="py-16">
+        <section className="py-16" id="about">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-extrabold text-center mb-12">
               Why Choose Glaze Palawan Car Rental
@@ -118,7 +114,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-gray-50" id="contact">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-extrabold text-center mb-12">
               Contact Us
@@ -252,5 +248,7 @@ function getVehicleTypeDescription(type: VehicleType): string {
       return "Perfect for group travel to Palawan's attractions.";
     case "TRUCK":
       return "Powerful and capable for off-road Palawan experiences.";
+    case "MOTORCYCLE":
+      return "Fast and agile, ideal for exploring Palawan's scenic routes.";
   }
 }

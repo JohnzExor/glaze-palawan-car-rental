@@ -1,22 +1,31 @@
-import { Car, Truck } from "lucide-react";
 import { VehicleType } from "@prisma/client";
+import {
+  CarIcon,
+  TruckIcon,
+  HomeIcon,
+  BikeIcon,
+  MountainIcon,
+} from "lucide-react"; // Alternative icons
 
-interface VehicleTypeIconProps {
+export function VehicleTypeIcon({
+  type,
+  className,
+}: {
   type: VehicleType;
-  className?: string;
-}
-
-export function VehicleTypeIcon({ type, className }: VehicleTypeIconProps) {
+  className: string;
+}) {
   switch (type) {
     case "CAR":
-      return <Car className={className} />;
+      return <CarIcon className={className} />;
     case "SUV":
-      return <Truck className={className} />;
+      return <MountainIcon className={className} />; // SUV alternative icon
     case "VAN":
-      return <Truck className={className} />;
+      return <HomeIcon className={className} />; // Van alternative icon
     case "TRUCK":
-      return <Truck className={className} />;
+      return <TruckIcon className={className} />;
+    case "MOTORCYCLE":
+      return <BikeIcon className={className} />; // BikeIcon for motorcycle
     default:
-      return null;
+      return <CarIcon className={className} />; // Default to car icon
   }
 }

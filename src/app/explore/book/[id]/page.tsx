@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import prisma from "@/lib/db";
 import { BookingForm } from "./booking-form";
 import { Cog, Fuel, Users } from "lucide-react";
+import Image from "next/image";
 
 export default async function BookingPage({
   params,
@@ -23,7 +24,7 @@ export default async function BookingPage({
         <h1 className="text-3xl font-bold mb-6">Book {vehicle.name}</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <img
+            <Image
               src={vehicle.imageUrl || "/placeholder.svg"}
               alt={vehicle.name}
               className="w-full h-64 object-cover rounded-lg"

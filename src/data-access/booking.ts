@@ -6,3 +6,11 @@ export const findAllBookings = async () => {
   });
   return data;
 };
+
+export const findAllUserBookings = async (email: string) => {
+  const data = await prisma.user.findUnique({
+    where: { email },
+    include: { bookings: { include: { vehicle: true } } },
+  });
+  return data?.bookings;
+};
