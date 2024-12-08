@@ -21,20 +21,28 @@ model User {
 }
 
 model Vehicle {
-  id           String      @id @default(cuid())
-  name         String
-  type         VehicleType
-  categoryId   String
-  category     Category    @relation(fields: [categoryId], references: [id])
-  licensePlate String?     @unique
-  rentPerDay   Float
-  isAvailable  Boolean     @default(true)
-  description  String?
-  imageUrl     String?
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  bookings     Booking[]
-  Feedback     Feedback[]
+  id              String           @id @default(cuid())
+  name            String
+  type            VehicleType
+  categoryId      String
+  category        Category         @relation(fields: [categoryId], references: [id])
+  licensePlate    String?          @unique
+  rentPerDay      Float
+  isAvailable     Boolean          @default(true)
+  description     String?
+  imageUrl        String?
+  maxFuelCapacity Float // Maximum fuel capacity in liters
+  transmission    TransmissionType // Manual or Automatic
+  seatingCapacity Int // Number of people that can fit in the car
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  bookings        Booking[]
+  feedback        Feedback[]
+}
+
+enum TransmissionType {
+  MANUAL
+  AUTOMATIC
 }
 
 model Category {
@@ -81,11 +89,10 @@ model Feedback {
 }
 
 enum VehicleType {
-  MOTORBIKE
   CAR
+  SUV
   VAN
   TRUCK
-  SUV
 }
 
 enum BookingStatus {

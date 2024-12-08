@@ -108,6 +108,45 @@ export const columns: ColumnDef<Vehicle>[] = [
     ),
   },
   {
+    accessorKey: "maxFuelCapacity",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        className="shadow-none"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Max Fuel Capacity
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+  },
+  {
+    accessorKey: "transmission",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        className="shadow-none"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Transmission
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+  },
+  {
+    accessorKey: "seatingCapacity",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        className="shadow-none"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Seating Capacity
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+  },
+  {
     accessorKey: "isAvailable",
     header: ({ column }) => (
       <Button
@@ -120,6 +159,20 @@ export const columns: ColumnDef<Vehicle>[] = [
       </Button>
     ),
     cell: ({ row }) => (row.getValue("isAvailable") ? "Yes" : "No"),
+  },
+  {
+    accessorKey: "createdAt",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        className="shadow-none"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Created At
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+    cell: ({ row }) => new Date(row.getValue("createdAt")).toLocaleDateString(),
   },
   {
     id: "actions",
