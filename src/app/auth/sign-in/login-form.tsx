@@ -1,103 +1,114 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import z from "zod";
+import { useForm } from "react-hook-form";
+import { loginSchema } from "@/types/definitions";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useToast } from "@/hooks/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoginUserAction } from "./actions";
+import { useServerAction } from "zsa-react";
+import { useRouter } from "next/navigation";
+import { LoaderCircle } from "lucide-react";
 
 export function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const { toast } = useToast();
   const router = useRouter();
+  const { execute, isPending, isSuccess } = useServerAction(LoginUserAction);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-    // Here you would typically send a request to your API to authenticate the user
+  async function onSubmit(values: z.infer<typeof loginSchema>) {
     try {
-      // Simulating an API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // For demonstration purposes, we'll just check if the email and password are not empty
-      if (email && password) {
-        // Successful login
-        router.push("/explore");
-      } else {
-        throw new Error("Invalid email or password");
+      const res = await execute(values);
+      if (res[1]) {
+        if (res[1].message === "Email not found") {
+          return form.setError("email", {
+            type: "manual",
+            message: res[1].message,
+          });
+        }
+        return form.setError("password", {
+          type: "manual",
+          message: res[1].message,
+        });
       }
-    } catch (err) {
-      setError(
-        "Failed to log in. Please check your credentials and try again."
-      );
+      toast({ description: "Sign in success" });
+      router.push("/explore");
+    } catch (error) {
+      console.error(error);
     }
-  };
+  }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-      {error && (
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
-      <div className="space-y-4">
-        <div>
-          <Label htmlFor="email">Email address</Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="mt-1"
-          />
-        </div>
-        <div>
-          <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="mt-1"
-          />
-        </div>
-      </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter your email"
+                  type="email"
+                  {...field}
+                  disabled={isPending || isSuccess}
+                />
+              </FormControl>
 
-      <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <input
-            id="remember-me"
-            name="remember-me"
-            type="checkbox"
-            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-          />
-          <label
-            htmlFor="remember-me"
-            className="ml-2 block text-sm text-gray-900"
-          >
-            Remember me
-          </label>
-        </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-        <div className="text-sm">
-          <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
-            Forgot your password?
-          </a>
-        </div>
-      </div>
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter your password"
+                  type="password"
+                  {...field}
+                  disabled={isPending || isSuccess}
+                />
+              </FormControl>
 
-      <Button type="submit" className="w-full">
-        Log in
-      </Button>
-    </form>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={isPending || isSuccess}
+        >
+          {isPending || isSuccess ? (
+            <LoaderCircle className=" animate-spin" />
+          ) : (
+            "Sign in"
+          )}
+        </Button>
+      </form>
+    </Form>
   );
 }

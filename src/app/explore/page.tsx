@@ -21,8 +21,7 @@ export default async function ExplorePage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-grow container mx-auto px-4 py-8">
+      <main className="flex-grow container mx-auto px-4 pt-20">
         <h1 className="text-3xl font-bold mb-6">Explore Our Vehicles</h1>
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <Filters

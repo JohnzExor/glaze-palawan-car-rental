@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import prisma from "@/lib/db";
 import { BookingForm } from "./booking-form";
-import { Header } from "../../header";
 import { Cog, Fuel, Users } from "lucide-react";
 
 export default async function BookingPage({
@@ -20,8 +19,7 @@ export default async function BookingPage({
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-grow container mx-auto px-4 py-8">
+      <main className="flex-grow container mx-auto px-4 pt-20">
         <h1 className="text-3xl font-bold mb-6">Book {vehicle.name}</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>

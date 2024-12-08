@@ -25,7 +25,7 @@ export function BookingForm({ vehicle }: BookingFormProps) {
       endDate,
     });
     // Redirect to a confirmation page or show a success message
-    router.push("/explore/booking-confirmation");
+    router.push(`/explore/book/${vehicle.id}/booking-confirmation`);
   };
 
   return (
