@@ -18,6 +18,8 @@ import { useServerAction } from "zsa-react";
 import { useToast } from "@/hooks/use-toast";
 import { LoaderCircle } from "lucide-react";
 import { createUserAction } from "./actions";
+import { Checkbox } from "../ui/checkbox";
+import { useState } from "react";
 
 export function SignupForm({
   setPage,
@@ -25,7 +27,7 @@ export function SignupForm({
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const { toast } = useToast();
-  const router = useRouter();
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const { isPending, isSuccess, execute } = useServerAction(createUserAction);
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -39,6 +41,9 @@ export function SignupForm({
   });
 
   async function onSubmit(values: z.infer<typeof registerSchema>) {
+    if (!termsAccepted) {
+      return toast({ title: "Terms", description: "Terms not accepted" });
+    }
     try {
       const res = await execute(values);
       console.log(res);
@@ -174,6 +179,25 @@ export function SignupForm({
               </FormItem>
             )}
           />
+          <div className="items-top flex space-x-2">
+            <Checkbox
+              id="terms1"
+              checked={termsAccepted} // Use `checked` instead of `value`
+              onCheckedChange={(value) => setTermsAccepted(value === true)} // Ensure the value passed is a boolean
+            />
+
+            <div className="grid gap-1.5 leading-none">
+              <label
+                htmlFor="terms1"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Accept terms and conditions
+              </label>
+              <p className="text-sm text-muted-foreground">
+                You agree to our Terms of Service and Privacy Policy.
+              </p>
+            </div>
+          </div>
           <Button
             type="submit"
             disabled={isPending || isSuccess}

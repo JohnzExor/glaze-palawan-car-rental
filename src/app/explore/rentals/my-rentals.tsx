@@ -46,7 +46,10 @@ export function MyRentals({ bookings }: { bookings: BookingsWithVehicle[] }) {
           new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
         );
       } else if (sortBy === "AMOUNT") {
-        return b.totalAmount - a.totalAmount;
+        return (
+          (parseFloat(b.totalAmount as string) || 0) -
+          (parseFloat(a.totalAmount as string) || 0)
+        );
       }
       return 0;
     });
