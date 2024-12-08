@@ -15,18 +15,19 @@ export const registerSchema = z.object({
 
 export const vehicleSchema = z.object({
   name: z.string().min(1, "Vehicle name is required"),
-  type: z.string().min(1, "Vehicle type is required"), // Add VehicleType validation if enum is available
-  categoryId: z.string().min(1, "Category is required"),
+  type: z.enum(["CAR", "SUV", "VAN", "MOTORCYCLE"]), // Add VehicleType validation if enum is available
+  // Add VehicleType validation if enum is available
   licensePlate: z.string().optional(),
   rentPerDay: z
-    .number()
+    .string()
     .min(0, "Rent per day must be greater than or equal to 0"),
   isAvailable: z.boolean(),
   description: z.string().optional(),
-  imageUrl: z.string().url("Invalid URL").optional(),
+  attachments: z.array(z.string()),
   maxFuelCapacity: z
-    .number()
+    .string()
     .min(0, "Fuel capacity must be greater than or equal to 0"),
-  transmission: z.string().min(1, "Transmission is required"), // Add TransmissionType validation if enum is available
-  seatingCapacity: z.number().min(1, "Seating capacity must be at least 1"),
+  transmission: z.enum(["MANUAL", "AUTOMATIC"]), // Add TransmissionType validation if enum is available
+  seatingCapacity: z.string().min(1, "Seating capacity must be at least 1"),
+  colors: z.string().min(1, "Colors must be at least 1"),
 });

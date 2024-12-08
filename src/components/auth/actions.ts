@@ -1,7 +1,8 @@
 "use server";
 
-import { registerSchema } from "@/types/definitions";
+import { loginSchema, registerSchema } from "@/types/definitions";
 import { createServerAction } from "zsa";
+import { signIn } from "next-auth/react";
 import { createUserUseCase } from "@/use-cases/user";
 
 export const createUserAction = createServerAction()

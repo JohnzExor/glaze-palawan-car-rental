@@ -1,7 +1,6 @@
 import { loginSchema } from "@/types/definitions";
 import { createServerAction } from "zsa";
 import { signIn } from "next-auth/react";
-import { revalidatePath } from "next/cache";
 
 export const LoginUserAction = createServerAction()
   .input(loginSchema)

@@ -43,14 +43,27 @@ export const columns: ColumnDef<User>[] = [
     ),
   },
   {
-    accessorKey: "name",
+    accessorKey: "firstName",
     header: ({ column }) => (
       <Button
         variant="ghost"
         className="shadow-none"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        Name
+        Firstname
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+  },
+  {
+    accessorKey: "lastName",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        className="shadow-none"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Lastname
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),

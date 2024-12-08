@@ -37,11 +37,6 @@ const navigations = [
         path: "/admin/dashboard/vehicles",
         icon: Car,
       },
-      {
-        name: "Categories",
-        path: "/admin/dashboard/categories",
-        icon: Tag,
-      },
     ],
   },
   {

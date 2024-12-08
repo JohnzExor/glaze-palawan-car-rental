@@ -7,10 +7,11 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Session } from "next-auth";
 import Logout from "@/components/logout";
 import NavigationLinks from "./nav-links";
-import NavigationToggle from "./nav-toggle";
 import { ModeToggle } from "@/components/theme/mode-toggle";
 import AuthDialog, { AuthDialogRef } from "@/components/auth/auth-dialog";
 import { Button } from "@/components/ui/button";
+import NavigationToggle from "./nav-toggle";
+import NavLinks from "./nav-links";
 
 export function Header({ session }: { session: Session | null }) {
   const authDialogRef = useRef<AuthDialogRef>(null);
@@ -20,9 +21,9 @@ export function Header({ session }: { session: Session | null }) {
   };
 
   return (
-    <header className="md:fixed w-full backdrop-blur-3xl border-b">
+    <header className="md:fixed w-full backdrop-blur-3xl border-b md:hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-        <Link href="/explore" className="flex items-center">
+        <Link href="/" className="flex items-center">
           <Image
             src="/images/icon.png"
             alt="Glaze Palawan Car Rental Logo"
@@ -34,7 +35,7 @@ export function Header({ session }: { session: Session | null }) {
           </span>
         </Link>
         <ul className="items-center gap-4 hidden lg:flex">
-          <NavigationLinks session={session} />
+          <NavLinks />
         </ul>
         <NavigationToggle session={session} />
         {session?.user ? (

@@ -5,6 +5,7 @@ import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Vehicle } from "@prisma/client";
 import { Checkbox } from "@/components/ui/checkbox";
+import DeleteVehicleDialog from "./delete-vehicle-dialog";
 
 export const columns: ColumnDef<Vehicle>[] = [
   {
@@ -182,9 +183,7 @@ export const columns: ColumnDef<Vehicle>[] = [
         <Button variant="outline" size="sm">
           Edit
         </Button>
-        <Button variant="destructive" size="sm">
-          Delete
-        </Button>
+        <DeleteVehicleDialog id={row.id} />
       </div>
     ),
     enableSorting: false,

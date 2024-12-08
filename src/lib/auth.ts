@@ -1,7 +1,6 @@
 import { loginUser } from "@/data-access/user";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { revalidatePath } from "next/cache";
 
 export const BASE_PATH = "/api/auth";
 
@@ -32,7 +31,6 @@ export const authOptions: NextAuthOptions = {
           if (!credentials?.email || !credentials?.password) return null;
 
           const user = await loginUser(credentials.email, credentials.password);
-          revalidatePath("/explore");
           return { ...user, error: null };
         } catch (error) {
           throw error;

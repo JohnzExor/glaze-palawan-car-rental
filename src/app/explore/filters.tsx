@@ -14,19 +14,17 @@ import { Button } from "@/components/ui/button";
 
 interface FiltersProps {
   transmissionTypes: string[];
-  seatingCapacities: number[];
-  categories: { id: string; name: string }[];
+  seatingCapacities: string[];
 }
 
 export function Filters({
   transmissionTypes,
   seatingCapacities,
-  categories,
 }: FiltersProps) {
   const [priceRange, setPriceRange] = useState([0, 10000]);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
+    <div className="p-6 rounded-lg shadow-md">
       <h2 className="text-xl font-semibold mb-4">Filters</h2>
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="transmission">
@@ -47,22 +45,6 @@ export function Filters({
               <div key={capacity} className="flex items-center space-x-2 mb-2">
                 <Checkbox id={`capacity-${capacity}`} />
                 <Label htmlFor={`capacity-${capacity}`}>{capacity} seats</Label>
-              </div>
-            ))}
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="category">
-          <AccordionTrigger>Category</AccordionTrigger>
-          <AccordionContent>
-            {categories.map((category) => (
-              <div
-                key={category.id}
-                className="flex items-center space-x-2 mb-2"
-              >
-                <Checkbox id={`category-${category.id}`} />
-                <Label htmlFor={`category-${category.id}`}>
-                  {category.name}
-                </Label>
               </div>
             ))}
           </AccordionContent>

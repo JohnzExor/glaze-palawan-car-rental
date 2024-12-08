@@ -23,9 +23,10 @@ const Logout = () => {
   return (
     <AlertDialog>
       <AlertDialogTrigger
-        className={cn(buttonVariants({ variant: "outline" }))}
+        className={cn(buttonVariants({ variant: "outline" }), "w-full")}
       >
         <LogOut size={15} />
+        <span>Log out</span>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

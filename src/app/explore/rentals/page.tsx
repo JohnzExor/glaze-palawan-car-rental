@@ -15,7 +15,7 @@ export default async function MyRentalsPage() {
   }
   return (
     <div className="min-h-screen flex flex-col">
-      <main className="flex-grow container mx-auto px-4 pt-20">
+      <main className="flex-grow container mx-auto px-4 md:pt-20">
         <h1 className="text-3xl font-bold mb-6">My Rentals</h1>
         {bookings ? (
           bookings.length > 1 ? (

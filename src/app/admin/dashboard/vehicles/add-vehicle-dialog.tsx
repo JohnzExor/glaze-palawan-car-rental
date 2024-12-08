@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Dialog,
   DialogContent,
@@ -7,14 +9,15 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import React from "react";
+import React, { useState } from "react";
 import { VehicleForm } from "./vehicle-form";
 import clsx from "clsx";
 import { buttonVariants } from "@/components/ui/button";
 
 const AddVehicleDialog = () => {
+  const [open, setOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className={clsx(buttonVariants())}>
         Add Vehicle
       </DialogTrigger>
@@ -26,7 +29,7 @@ const AddVehicleDialog = () => {
             ensure all information is accurate before submitting.
           </DialogDescription>
         </DialogHeader>
-        <VehicleForm />
+        <VehicleForm setOpen={setOpen} />
       </DialogContent>
     </Dialog>
   );

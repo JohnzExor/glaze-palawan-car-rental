@@ -21,8 +21,6 @@ export function VehicleTypeIcon({
       return <MountainIcon className={className} />; // SUV alternative icon
     case "VAN":
       return <HomeIcon className={className} />; // Van alternative icon
-    case "TRUCK":
-      return <TruckIcon className={className} />;
     case "MOTORCYCLE":
       return <BikeIcon className={className} />; // BikeIcon for motorcycle
     default:

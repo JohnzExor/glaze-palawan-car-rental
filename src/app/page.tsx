@@ -15,8 +15,8 @@ const links = [
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+      <header className="shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center gap-2">
           <div className="flex items-center">
             <Image
               src="/images/icon.png"
@@ -24,7 +24,7 @@ export default function Home() {
               width={40}
               height={40}
             />
-            <span className="ml-2 text-2xl font-bold text-gray-900">
+            <span className="ml-2 text-xl md:text-2xl font-bold text-primary">
               Glaze Palawan Car Rental
             </span>
           </div>
@@ -65,7 +65,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="py-16 bg-gray-50">
+        <section className="py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-extrabold text-center mb-12">
               Our Vehicle Types
@@ -114,7 +114,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="py-16 bg-gray-50" id="contact">
+        <section className="py-16" id="contact">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-extrabold text-center mb-12">
               Contact Us
@@ -154,26 +154,16 @@ export default function Home() {
             <div className="w-full md:w-1/3 mb-6 md:mb-0">
               <h3 className="text-lg font-semibold mb-2">Quick Links</h3>
               <ul className="space-y-2">
-                <li>
-                  <Link href="#" className="text-gray-400 hover:text-white">
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-gray-400 hover:text-white">
-                    Vehicles
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-gray-400 hover:text-white">
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-gray-400 hover:text-white">
-                    Contact
-                  </Link>
-                </li>
+                {links.map(({ path, name }, index) => (
+                  <li key={index}>
+                    <Link
+                      href={path}
+                      className="text-gray-400 hover:text-white"
+                    >
+                      {name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
             <div className="w-full md:w-1/3">
@@ -246,8 +236,6 @@ function getVehicleTypeDescription(type: VehicleType): string {
       return "Spacious and versatile for family adventures in Palawan.";
     case "VAN":
       return "Perfect for group travel to Palawan's attractions.";
-    case "TRUCK":
-      return "Powerful and capable for off-road Palawan experiences.";
     case "MOTORCYCLE":
       return "Fast and agile, ideal for exploring Palawan's scenic routes.";
   }

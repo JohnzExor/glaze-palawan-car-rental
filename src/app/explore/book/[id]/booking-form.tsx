@@ -1,58 +1,182 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import z from "zod";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useRouter } from "next/navigation";
+import { useState, useEffect, useMemo } from "react";
 import { Vehicle } from "@prisma/client";
+
+const bookingSchema = z.object({
+  startDate: z.string().nonempty("Start date is required"),
+  endDate: z.string().nonempty("End date is required"),
+  color: z.string().nonempty("Please select a color"),
+});
+
+type BookingFormInputs = z.infer<typeof bookingSchema>;
 
 interface BookingFormProps {
   vehicle: Vehicle;
 }
 
 export function BookingForm({ vehicle }: BookingFormProps) {
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const { toast } = useToast();
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // Here you would typically send a request to your API to create a booking
-    console.log("Booking submitted:", {
-      vehicleId: vehicle.id,
-      startDate,
-      endDate,
-    });
-    // Redirect to a confirmation page or show a success message
-    router.push(`/explore/book/${vehicle.id}/booking-confirmation`);
+  const form = useForm<BookingFormInputs>({
+    resolver: zodResolver(bookingSchema),
+    defaultValues: {
+      startDate: "",
+      endDate: "",
+      color: "",
+    },
+  });
+
+  const [totalAmount, setTotalAmount] = useState(0);
+
+  const colors = useMemo(
+    () => (vehicle.colors ? vehicle.colors.split(",") : []),
+    [vehicle.colors]
+  );
+
+  const today = useMemo(() => new Date().toISOString().split("T")[0], []);
+
+  const calculateTotalAmount = (startDate: string, endDate: string) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    if (end > start) {
+      const days = Math.ceil(
+        (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
+      );
+      return days * parseFloat(vehicle.rentPerDay || "0");
+    }
+
+    return 0;
   };
 
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      const { startDate, endDate } = values;
+      if (startDate && endDate) {
+        setTotalAmount(calculateTotalAmount(startDate, endDate));
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [form, vehicle.rentPerDay]);
+
+  async function onSubmit(values: BookingFormInputs) {
+    toast({
+      description: `Booking confirmed for ${vehicle.name}. Total: $${totalAmount}`,
+    });
+    router.push(`/explore/book/${vehicle.id}/booking-confirmation`);
+  }
+
+  const startDateValue = form.watch("startDate");
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <Label htmlFor="start-date">Start Date</Label>
-        <Input
-          id="start-date"
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          required
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {/* Start Date */}
+        <FormField
+          control={form.control}
+          name="startDate"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Start Date</FormLabel>
+              <FormControl>
+                <Input
+                  type="date"
+                  min={today} // Restrict past dates
+                  {...field}
+                  placeholder="Select start date"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <div>
-        <Label htmlFor="end-date">End Date</Label>
-        <Input
-          id="end-date"
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-          required
+
+        {/* End Date */}
+        <FormField
+          control={form.control}
+          name="endDate"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>End Date</FormLabel>
+              <FormControl>
+                <Input
+                  type="date"
+                  min={startDateValue || today} // Use memoized or current start date
+                  {...field}
+                  placeholder="Select end date"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <Button type="submit" className="w-full">
-        Book Now
-      </Button>
-    </form>
+
+        {/* Color Selection */}
+        <FormField
+          control={form.control}
+          name="color"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Select Color</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Choose a color" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {colors.map((color, index) => (
+                      <SelectItem key={index} value={color}>
+                        {color}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Total Amount */}
+        <div>
+          <p className="text-lg font-medium">
+            Total Amount: ${totalAmount.toFixed(2)}
+          </p>
+        </div>
+
+        {/* Submit Button */}
+        <Button type="submit" className="w-full">
+          Book Now
+        </Button>
+      </form>
+    </Form>
   );
 }

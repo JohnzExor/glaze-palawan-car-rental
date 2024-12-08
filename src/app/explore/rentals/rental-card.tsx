@@ -72,7 +72,7 @@ export function RentalCard({
           </div>
         </div>
       </CardContent>
-      <CardFooter className="bg-gray-50 p-6">
+      <CardFooter className="bg-muted p-6">
         {rental.status === "PENDING" && (
           <Button variant="outline" className="w-full">
             Modify Rental

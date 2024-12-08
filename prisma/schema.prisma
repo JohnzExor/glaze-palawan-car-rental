@@ -25,18 +25,17 @@ model Vehicle {
   id              String           @id @default(cuid())
   name            String
   type            VehicleType
-  categoryId      String
-  category        Category         @relation(fields: [categoryId], references: [id])
-  licensePlate    String?          @unique
-  rentPerDay      Float
+  licensePlate    String?
+  rentPerDay      String?
   isAvailable     Boolean          @default(true)
   description     String?
-  imageUrl        String?
-  maxFuelCapacity Float // Maximum fuel capacity in liters
+  attachments     String[]
+  maxFuelCapacity String? // Maximum fuel capacity in liters
   transmission    TransmissionType // Manual or Automatic
-  seatingCapacity Int // Number of people that can fit in the car
+  seatingCapacity String // Number of people that can fit in the car
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
+  colors          String?
   bookings        Booking[]
   feedback        Feedback[]
 }
@@ -44,13 +43,6 @@ model Vehicle {
 enum TransmissionType {
   MANUAL
   AUTOMATIC
-}
-
-model Category {
-  id          String    @id @default(cuid())
-  name        String    @unique
-  description String?
-  vehicles    Vehicle[]
 }
 
 model Booking {
@@ -61,7 +53,7 @@ model Booking {
   vehicle     Vehicle       @relation(fields: [vehicleId], references: [id])
   startDate   DateTime
   endDate     DateTime
-  totalAmount Float
+  totalAmount String
   status      BookingStatus @default(PENDING)
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
@@ -72,7 +64,7 @@ model Payment {
   id            String        @id @default(cuid())
   bookingId     String        @unique
   booking       Booking       @relation(fields: [bookingId], references: [id])
-  amount        Float
+  amount        String
   paymentMethod PaymentMethod
   status        PaymentStatus @default(PENDING)
   createdAt     DateTime      @default(now())
@@ -93,7 +85,6 @@ enum VehicleType {
   CAR
   SUV
   VAN
-  TRUCK
   MOTORCYCLE
 }
 
