@@ -33,7 +33,7 @@ export function Header({ session }: { session: Session | null }) {
             Glaze Palawan Car Rental
           </span>
         </Link>
-        <ul className="items-center gap-4 hidden lg:flex">
+        <ul className="items-center gap-8 hidden lg:flex">
           <NavigationLinks session={session} />
         </ul>
         <NavigationToggle session={session} />

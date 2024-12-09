@@ -29,6 +29,8 @@ import { useServerAction } from "zsa-react";
 import { createBookingAction } from "./actions";
 import { useSession } from "next-auth/react";
 import { Session } from "next-auth";
+import { Label } from "@/components/ui/label";
+import { Loader, LoaderCircle } from "lucide-react";
 
 export function BookingForm({
   vehicle,
@@ -37,7 +39,8 @@ export function BookingForm({
   vehicle: Vehicle;
   session: Session | null;
 }) {
-  const { execute } = useServerAction(createBookingAction);
+  const { execute, isPending, isSuccess } =
+    useServerAction(createBookingAction);
   const { toast } = useToast();
   const router = useRouter();
 
@@ -135,6 +138,7 @@ export function BookingForm({
                   type="date"
                   min={today}
                   placeholder="Select start date"
+                  disabled={isPending || isSuccess}
                   value={
                     field.value
                       ? new Date(field.value).toISOString().split("T")[0]
@@ -158,6 +162,7 @@ export function BookingForm({
               <FormControl>
                 <Input
                   type="date"
+                  disabled={isPending || isSuccess}
                   min={
                     form.getValues("startDate")
                       ? new Date(form.getValues("startDate"))
@@ -188,6 +193,7 @@ export function BookingForm({
               <FormLabel>Vehicle Color</FormLabel>
               <FormControl>
                 <Select
+                  disabled={isPending || isSuccess}
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
@@ -217,6 +223,7 @@ export function BookingForm({
               <FormLabel>Payment Method</FormLabel>
               <FormControl>
                 <Select
+                  disabled={isPending || isSuccess}
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
@@ -237,6 +244,11 @@ export function BookingForm({
           )}
         />
 
+        <div className="grid w-full items-center gap-1.5">
+          <Label htmlFor="picture">Submit your valid id</Label>
+          <Input disabled={isPending || isSuccess} id="picture" type="file" />
+        </div>
+
         {/* Total Amount */}
         <div>
           <p className="text-lg font-medium">
@@ -245,8 +257,16 @@ export function BookingForm({
         </div>
 
         {/* Submit Button */}
-        <Button type="submit" className="w-full">
-          Book Now
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={isPending || isSuccess}
+        >
+          {isPending || isSuccess ? (
+            <LoaderCircle className="animate-spin" />
+          ) : (
+            "Book Now"
+          )}
         </Button>
       </form>
     </Form>

@@ -1,12 +1,18 @@
 "use client";
 import { buttonVariants } from "@/components/ui/button";
 import clsx from "clsx";
-import { Heart, Navigation } from "lucide-react";
+import { Heart, Home, Navigation } from "lucide-react";
 import { Session } from "next-auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const links = [
+  {
+    name: "Home",
+    path: "/",
+    icon: Home,
+    requiredSession: false,
+  },
   {
     name: "Explore",
     path: "/explore",
