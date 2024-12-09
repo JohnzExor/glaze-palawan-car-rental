@@ -70,8 +70,10 @@ export function MyRentals({ bookings }: { bookings: BookingsWithVehicle[] }) {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="ALL">All Rentals</SelectItem>
-              {Object.values(BookingStatus).map((status) => (
-                <SelectItem value={status}>{status}</SelectItem>
+              {Object.values(BookingStatus).map((status, index) => (
+                <SelectItem value={status} key={index}>
+                  {status}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
