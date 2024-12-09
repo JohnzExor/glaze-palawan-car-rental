@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useSession } from "next-auth/react";
 import { RentalCard } from "./rental-card";
-import { Booking, Vehicle } from "@prisma/client";
+import { Booking, BookingStatus, Vehicle } from "@prisma/client";
 
 type BookingsWithVehicle = Booking & {
   vehicle: Vehicle;
@@ -70,9 +70,9 @@ export function MyRentals({ bookings }: { bookings: BookingsWithVehicle[] }) {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="ALL">All Rentals</SelectItem>
-              <SelectItem value="UPCOMING">Upcoming</SelectItem>
-              <SelectItem value="ONGOING">Ongoing</SelectItem>
-              <SelectItem value="COMPLETED">Completed</SelectItem>
+              {Object.values(BookingStatus).map((status) => (
+                <SelectItem value={status}>{status}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
           <Select value={sortBy} onValueChange={setSortBy}>

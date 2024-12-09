@@ -108,7 +108,7 @@ export const columns: ColumnDef<Booking>[] = [
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
-    cell: ({ row }) => `$${(row.getValue("totalAmount") as number).toFixed(2)}`,
+    // cell: ({ row }) => `$${(row.getValue("totalAmount") as number).toFixed(2)}`,
   },
   {
     accessorKey: "status",

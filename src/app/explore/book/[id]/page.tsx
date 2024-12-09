@@ -4,12 +4,16 @@ import { BookingForm } from "./booking-form";
 import { Cog, Fuel, Users } from "lucide-react";
 import Image from "next/image";
 import { fileUrl } from "@/lib/storage";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { UserDetails } from "./user-details";
 
 export default async function BookingPage({
   params,
 }: {
   params: { id: string };
 }) {
+  const session = await getServerSession(authOptions);
   const vehicle = await prisma.vehicle.findUnique({
     where: { id: params.id },
   });
@@ -24,7 +28,7 @@ export default async function BookingPage({
 
   return (
     <div className="min-h-screen flex flex-col">
-      <main className="flex-grow container mx-auto px-4 md:pt-20">
+      <main className="flex-grow container mx-auto md:pt-20">
         <h1 className="text-3xl font-bold mb-6">Book {vehicle.name}</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
@@ -59,7 +63,10 @@ export default async function BookingPage({
               </div>
             </div>
           </div>
-          <BookingForm vehicle={vehicle} />
+          <div>
+            <UserDetails session={session} />
+            <BookingForm vehicle={vehicle} session={session} />
+          </div>
         </div>
       </main>
     </div>

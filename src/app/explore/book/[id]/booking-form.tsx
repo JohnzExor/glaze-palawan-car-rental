@@ -22,31 +22,41 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
-import { useState, useEffect, useMemo } from "react";
-import { Vehicle } from "@prisma/client";
+import { useMemo, useEffect, useState } from "react";
+import { PaymentMethod, Vehicle } from "@prisma/client";
+import { BookingSchema } from "@/types/definitions";
+import { useServerAction } from "zsa-react";
+import { createBookingAction } from "./actions";
+import { useSession } from "next-auth/react";
+import { Session } from "next-auth";
 
-const bookingSchema = z.object({
-  startDate: z.string().nonempty("Start date is required"),
-  endDate: z.string().nonempty("End date is required"),
-  color: z.string().nonempty("Please select a color"),
-});
-
-type BookingFormInputs = z.infer<typeof bookingSchema>;
-
-interface BookingFormProps {
+export function BookingForm({
+  vehicle,
+  session,
+}: {
   vehicle: Vehicle;
-}
-
-export function BookingForm({ vehicle }: BookingFormProps) {
+  session: Session | null;
+}) {
+  const { execute } = useServerAction(createBookingAction);
   const { toast } = useToast();
   const router = useRouter();
 
-  const form = useForm<BookingFormInputs>({
-    resolver: zodResolver(bookingSchema),
+  const form = useForm<z.infer<typeof BookingSchema>>({
+    resolver: zodResolver(BookingSchema),
     defaultValues: {
-      startDate: "",
-      endDate: "",
-      color: "",
+      userId: session?.user.id,
+      vehicleId: vehicle.id,
+      vehicleColor: "",
+      startDate: undefined,
+      endDate: undefined,
+      totalAmount: "",
+      payment: {
+        create: {
+          bookingId: "",
+          amount: "",
+          paymentMethod: "CASH", // Default value for `PaymentMethodEnum`
+        },
+      },
     },
   });
 
@@ -59,17 +69,13 @@ export function BookingForm({ vehicle }: BookingFormProps) {
 
   const today = useMemo(() => new Date().toISOString().split("T")[0], []);
 
-  const calculateTotalAmount = (startDate: string, endDate: string) => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-
-    if (end > start) {
+  const calculateTotalAmount = (startDate: Date, endDate: Date) => {
+    if (endDate > startDate) {
       const days = Math.ceil(
-        (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
+        (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
       );
       return days * parseFloat(vehicle.rentPerDay || "0");
     }
-
     return 0;
   };
 
@@ -77,21 +83,42 @@ export function BookingForm({ vehicle }: BookingFormProps) {
     const subscription = form.watch((values) => {
       const { startDate, endDate } = values;
       if (startDate && endDate) {
-        setTotalAmount(calculateTotalAmount(startDate, endDate));
+        setTotalAmount(
+          calculateTotalAmount(new Date(startDate), new Date(endDate))
+        );
       }
     });
 
     return () => subscription.unsubscribe();
   }, [form, vehicle.rentPerDay]);
 
-  async function onSubmit(values: BookingFormInputs) {
-    toast({
-      description: `Booking confirmed for ${vehicle.name}. Total: $${totalAmount}`,
-    });
-    router.push(`/explore/book/${vehicle.id}/booking-confirmation`);
-  }
+  async function onSubmit(values: z.infer<typeof BookingSchema>) {
+    if (values.startDate === values.endDate) {
+      return toast({
+        title: "Booking error",
+        description: "The start and end date are the same",
+      });
+    }
 
-  const startDateValue = form.watch("startDate");
+    try {
+      const res = await execute({
+        ...values,
+        totalAmount: totalAmount.toString(),
+      });
+      console.log(res);
+      if (res[1]) {
+        return toast({
+          description: "Error",
+        });
+      }
+      toast({
+        description: `Booking confirmed for ${vehicle.name}. Total: $${totalAmount}`,
+      });
+      router.push(`/explore/book/${vehicle.id}/booking-confirmation`);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <Form {...form}>
@@ -106,9 +133,14 @@ export function BookingForm({ vehicle }: BookingFormProps) {
               <FormControl>
                 <Input
                   type="date"
-                  min={today} // Restrict past dates
-                  {...field}
+                  min={today}
                   placeholder="Select start date"
+                  value={
+                    field.value
+                      ? new Date(field.value).toISOString().split("T")[0]
+                      : ""
+                  }
+                  onChange={(e) => field.onChange(new Date(e.target.value))}
                 />
               </FormControl>
               <FormMessage />
@@ -126,9 +158,20 @@ export function BookingForm({ vehicle }: BookingFormProps) {
               <FormControl>
                 <Input
                   type="date"
-                  min={startDateValue || today} // Use memoized or current start date
-                  {...field}
+                  min={
+                    form.getValues("startDate")
+                      ? new Date(form.getValues("startDate"))
+                          .toISOString()
+                          .split("T")[0]
+                      : today
+                  }
                   placeholder="Select end date"
+                  value={
+                    field.value
+                      ? new Date(field.value).toISOString().split("T")[0]
+                      : ""
+                  }
+                  onChange={(e) => field.onChange(new Date(e.target.value))}
                 />
               </FormControl>
               <FormMessage />
@@ -136,13 +179,13 @@ export function BookingForm({ vehicle }: BookingFormProps) {
           )}
         />
 
-        {/* Color Selection */}
+        {/* Vehicle Color */}
         <FormField
           control={form.control}
-          name="color"
+          name="vehicleColor"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Select Color</FormLabel>
+              <FormLabel>Vehicle Color</FormLabel>
               <FormControl>
                 <Select
                   onValueChange={field.onChange}
@@ -155,6 +198,35 @@ export function BookingForm({ vehicle }: BookingFormProps) {
                     {colors.map((color, index) => (
                       <SelectItem key={index} value={color}>
                         {color}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Payment Method */}
+        <FormField
+          control={form.control}
+          name="payment.create.paymentMethod"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Payment Method</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a payment method" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.values(PaymentMethod).map((methods, key) => (
+                      <SelectItem value={methods} key={key}>
+                        {methods}
                       </SelectItem>
                     ))}
                   </SelectContent>

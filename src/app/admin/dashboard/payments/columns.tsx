@@ -54,7 +54,7 @@ export const columns: ColumnDef<Payment>[] = [
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
-    cell: ({ row }) => `$${(row.getValue("amount") as number).toFixed(2)}`,
+    // cell: ({ row }) => `$${(row.getValue("amount") as number).toFixed(2)}`,
   },
   {
     accessorKey: "paymentMethod",

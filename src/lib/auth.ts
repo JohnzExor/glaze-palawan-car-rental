@@ -47,6 +47,7 @@ export const authOptions: NextAuthOptions = {
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
+          phoneNumber: user.phoneNumber,
         };
       }
       return token;
@@ -60,6 +61,7 @@ export const authOptions: NextAuthOptions = {
           firstName: token.firstName,
           lastName: token.lastName,
           email: token.email,
+          phoneNumber: token.phoneNumber,
         },
       };
     },

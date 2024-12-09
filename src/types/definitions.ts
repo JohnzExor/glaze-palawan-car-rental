@@ -1,5 +1,27 @@
 import { z } from "zod";
 
+export const BookingStatusEnum = z.enum(["PENDING", "CONFIRMED", "CANCELLED"]);
+export const PaymentMethodEnum = z.enum(["CASH", "CREDIT_CARD", "PAYPAL"]); // Add your payment methods
+export const PaymentStatusEnum = z.enum(["PENDING", "PAID", "FAILED"]);
+
+export const PaymentSchema = z.object({
+  bookingId: z.string(),
+  amount: z.string(),
+  paymentMethod: PaymentMethodEnum,
+});
+
+export const BookingSchema = z.object({
+  userId: z.string(),
+  vehicleId: z.string(),
+  vehicleColor: z.string(),
+  startDate: z.date(),
+  endDate: z.date(),
+  totalAmount: z.string(),
+  payment: z.object({
+    create: PaymentSchema, // Nested input for creating a Payment
+  }),
+});
+
 export const loginSchema = z.object({
   email: z.string().max(50),
   password: z.string().max(250),
