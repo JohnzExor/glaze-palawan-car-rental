@@ -72,8 +72,8 @@ export default async function BookingPage({
               </div>
               <div className="border-t pt-4">
                 <p className="text-sm text-gray-700">
-                  "Great vehicle, very comfortable and easy to drive. Highly
-                  recommend!"
+                  &quot;Great vehicle, very comfortable and easy to drive.
+                  Highly recommend!&quot;
                 </p>
                 <p className="text-sm text-gray-500 mt-2">- John Doe</p>
               </div>

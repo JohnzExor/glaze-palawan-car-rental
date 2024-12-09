@@ -156,8 +156,8 @@ export function RentalCard({
             <DialogContent>
               <h3 className="text-lg font-semibold">Leave a Review</h3>
               <p className="text-sm">
-                We'd love to hear your feedback! Please share your experience
-                with us to help improve our services.
+                We&quot;d love to hear your feedback! Please share your
+                experience with us to help improve our services.
               </p>
               <div className="mt-4">
                 <textarea
