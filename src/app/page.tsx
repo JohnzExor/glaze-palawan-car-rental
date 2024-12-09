@@ -10,6 +10,7 @@ import { GallerySection } from "@/components/components_gallery-section";
 import { TestimonialsSection } from "@/components/components_testimonials-section";
 import { ContactSection } from "@/components/components_contact-section";
 import { useRouter } from "next/navigation";
+import { ModeToggle } from "@/components/theme/mode-toggle";
 
 const links = [
   { name: "Vehicles", path: "/explore" },
@@ -57,6 +58,7 @@ export default function Home() {
           >
             Book Now
           </Button>
+          <ModeToggle />
         </div>
       </header>
 

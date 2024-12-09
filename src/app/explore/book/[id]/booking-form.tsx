@@ -115,7 +115,7 @@ export function BookingForm({
         });
       }
       toast({
-        description: `Booking confirmed for ${vehicle.name}. Total: $${totalAmount}`,
+        description: `Booking confirmed for ${vehicle.name}. `,
       });
       router.push(`/explore/book/${vehicle.id}/booking-confirmation`);
     } catch (error) {

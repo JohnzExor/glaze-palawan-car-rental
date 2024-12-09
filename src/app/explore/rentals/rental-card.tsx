@@ -1,5 +1,12 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { CalendarIcon, CarIcon, CreditCardIcon } from "lucide-react";
 import { Booking } from "@prisma/client";
 
@@ -74,19 +81,96 @@ export function RentalCard({
       </CardContent>
       <CardFooter className="bg-muted p-6">
         {rental.status === "PENDING" && (
-          <Button variant="outline" className="w-full">
-            Modify Rental
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="w-full">
+                View Rental
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <h3 className="text-lg font-semibold">Rental Details</h3>
+              <p className="text-sm">
+                Here are the details of your pending rental. You can review the
+                information below.
+              </p>
+              <div className="mt-4">
+                <div className="flex justify-between mb-2">
+                  <span className="font-semibold">Vehicle Name:</span>
+                  <span>{rental.vehicle?.name || "Unknown Vehicle"}</span>
+                </div>
+                <div className="flex justify-between mb-2">
+                  <span className="font-semibold">Rental Period:</span>
+                  <span>
+                    {formatDate(rental.startDate)} -{" "}
+                    {formatDate(rental.endDate)}
+                  </span>
+                </div>
+                <div className="flex justify-between mb-2">
+                  <span className="font-semibold">Total Amount:</span>
+                  <span>₱{rental.totalAmount.toLocaleString()}</span>
+                </div>
+              </div>
+              <DialogFooter>
+                <DialogClose>
+                  <Button variant={"secondary"} className="w-full">
+                    Close
+                  </Button>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         )}
         {rental.status === "CONFIRMED" && (
-          <Button variant="outline" className="w-full">
-            Contact Support
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="w-full">
+                Contact Support
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <h3 className="text-lg font-semibold">Contact Support</h3>
+              <p className="text-sm">
+                If you have any questions or need assistance, please reach out
+                to our support team. You can contact us via email or phone, or
+                use the form below to send a message.
+              </p>
+              <div className="mt-4">
+                <h4 className="font-semibold">Support Contact:</h4>
+                <p>Email: support@rentalservice.com</p>
+                <p>Phone: +1-800-123-4567</p>
+              </div>
+              <DialogFooter>
+                <Button variant="outline">Close</Button>
+                <Button>Contact Support</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         )}
         {rental.status === "COMPLETED" && (
-          <Button variant="outline" className="w-full">
-            Leave a Review
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="w-full">
+                Leave a Review
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <h3 className="text-lg font-semibold">Leave a Review</h3>
+              <p className="text-sm">
+                We'd love to hear your feedback! Please share your experience
+                with us to help improve our services.
+              </p>
+              <div className="mt-4">
+                <textarea
+                  className="w-full h-24 p-2 border border-gray-300 rounded"
+                  placeholder="Write your review here..."
+                />
+              </div>
+              <DialogFooter>
+                <Button variant="outline">Cancel</Button>
+                <Button>Submit Review</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         )}
       </CardFooter>
     </Card>

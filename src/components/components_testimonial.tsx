@@ -21,7 +21,7 @@ export function Testimonial({ name, quote, rating }: TestimonialProps) {
             />
           ))}
         </div>
-        <p className="text-center text-gray-600 mb-4">&qout;{quote}&qout;</p>
+        <p className="text-center text-gray-600 mb-4">&quot;{quote}&quot;</p>
         <p className="font-semibold text-primary">{name}</p>
       </CardContent>
     </Card>

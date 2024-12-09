@@ -62,12 +62,30 @@ export default async function BookingPage({
                 </div>
               </div>
             </div>
+            <div className="mt-8">
+              <h3 className="text-2xl font-semibold mb-4">
+                Ratings & Comments
+              </h3>
+              <div className="flex items-center mb-4">
+                <span className="text-yellow-500">⭐⭐⭐⭐☆</span>
+                <span className="ml-2 text-sm text-gray-500">(4.0/5)</span>
+              </div>
+              <div className="border-t pt-4">
+                <p className="text-sm text-gray-700">
+                  "Great vehicle, very comfortable and easy to drive. Highly
+                  recommend!"
+                </p>
+                <p className="text-sm text-gray-500 mt-2">- John Doe</p>
+              </div>
+            </div>
           </div>
           <div>
             <UserDetails session={session} />
             <BookingForm vehicle={vehicle} session={session} />
           </div>
         </div>
+
+        {/* Ratings and Comments Section */}
       </main>
     </div>
   );
