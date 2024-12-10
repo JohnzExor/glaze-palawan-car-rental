@@ -252,7 +252,7 @@ export function BookingForm({
         {/* Total Amount */}
         <div>
           <p className="text-lg font-medium">
-            Total Amount: ${totalAmount.toFixed(2)}
+            Total Amount: ₱{totalAmount.toFixed(2)}
           </p>
         </div>
 
